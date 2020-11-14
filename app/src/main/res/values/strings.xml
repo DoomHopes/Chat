@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Chat</string>
+    <string name="communicator">Communicator</string>
+    <string name="ok">OK</string>
+    <string name="name">Name</string>
+    <string name="author_default">DNS</string>
+</resources>
