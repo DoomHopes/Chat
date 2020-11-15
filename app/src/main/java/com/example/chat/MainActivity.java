@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         tvAuthor = findViewById(R.id.textViewAuthor);
         etMessage = findViewById(R.id.editTextPersonAuthor);
 
-        tvAuthor.setText(etAuthor.getText() + ":");
+        tvAuthor.setText(etAuthor.getText());
         tvChatBox.setMovementMethod(new ScrollingMovementMethod());
 
         new Thread(loadMessages).start();

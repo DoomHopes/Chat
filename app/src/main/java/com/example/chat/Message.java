@@ -58,7 +58,7 @@ public class Message {
 
     @Override
     public String toString(){
-        return this.author + " " + this.text;
+        return this.author + " - " + this.text;
     }
 
     //Fabric
