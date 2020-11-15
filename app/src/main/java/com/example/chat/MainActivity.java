@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Please, enter message", Toast.LENGTH_SHORT).show();
             return;
         }
-        tvChatBox.append(tvAuthor.getText() + " - " + message + "\n");
+        exchanger.setMessage(new Message(etAuthor.getText().toString(), message));
+        //tvChatBox.append(tvAuthor.getText() + " - " + message + "\n");
         etMessage.setText("");
     }
 
