@@ -9,12 +9,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<Message> messages;
 
     private EditText etAuthor;
     private TextView tvChatBox;
     private TextView tvAuthor;
     private EditText etMessage;
+
+    public MainActivity() {
+        super();
+        messages = new ArrayList<>();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
