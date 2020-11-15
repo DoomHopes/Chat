@@ -2,6 +2,7 @@ package com.example.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -23,15 +24,15 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Message> messages;
+    private final ArrayList<Message> messages;
 
     private EditText etAuthor;
     private TextView tvChatBox;
     private TextView tvAuthor;
     private EditText etMessage;
 
-    private Runnable loadMessages;
-    private Runnable updateChat;
+    private final Runnable loadMessages;
+    private final Runnable updateChat;
     private String jsonResponse;
     private String forChatBox;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             try{
                 InputStream http = new URL("http://chat.momentfor.fun").openStream();
-                StringBuilder html = new StringBuilder("");
+                StringBuilder html = new StringBuilder();
                 int sym;
                 while ((sym = http.read())!=-1){
                     html.append((char)sym);
@@ -63,14 +64,15 @@ public class MainActivity extends AppCompatActivity {
         };
 
         updateChat = () -> {
-            String txt = "";
+            StringBuilder txt = new StringBuilder();
             for(Message m:messages){
-                txt+=m.toString()+"\n";
+                txt.append(m.toString()).append("\n");
             }
-            tvChatBox.setText(txt);
+            tvChatBox.setText(txt.toString());
         };
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(loadMessages).start();
     }
 
+    @SuppressLint("SetTextI18n")
     public void onClickSetAuthor(View view) {
         CharSequence authorName = etAuthor.getText();
         if(authorName.equals("")){
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     class ParseJson implements Runnable{
 
         private JSONArray messagesArray;
-        private String src;
+        private final String src;
 
         public ParseJson(String src) {
             this.src = src;
