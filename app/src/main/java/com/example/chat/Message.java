@@ -63,7 +63,7 @@ public class Message {
     }
 
     public String toGETRequest() {
-        return "author=" + this.author + "&text="+ this.text;
+        return "author=" + this.author + "&msg="+ this.text;
     }
 
     //Fabric
