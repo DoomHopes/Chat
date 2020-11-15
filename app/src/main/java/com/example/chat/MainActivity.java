@@ -9,6 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,9 +24,36 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvAuthor;
     private EditText etMessage;
 
+    private Runnable loadMessages;
+    private Runnable showChat;
+    private String forChatBox;
+
     public MainActivity() {
         super();
         messages = new ArrayList<>();
+        loadMessages = () ->{
+            //http://chat.momentfor.fun
+
+            String response = null;
+
+            try{
+                InputStream http = new URL("http://chat.momentfor.fun").openStream();
+                StringBuilder html = new StringBuilder("");
+                int sym;
+                while ((sym = http.read())!=-1){
+                    html.append((char)sym);
+                }
+                response = http.toString();
+                forChatBox = response;
+                runOnUiThread(showChat);
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        };
+
+        showChat = () -> {
+            tvChatBox.setText(forChatBox);
+        };
     }
 
     @Override
@@ -37,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         tvAuthor.setText(etAuthor.getText() + ":");
         tvChatBox.setMovementMethod(new ScrollingMovementMethod());
+
+        new Thread(loadMessages).start();
     }
 
     public void onClickSetAuthor(View view) {
