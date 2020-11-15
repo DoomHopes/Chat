@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
@@ -35,17 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private SendAndLoadMessage exchanger;
 
     private final Runnable updateChat;
+    private Runnable timerTick;
+    private Handler handler;
     private String jsonResponse;
-    private String forChatBox;
 
     public MainActivity() {
         super();
         messages = new ArrayList<>();
-
-        /*loadMessages = () ->{
-
-        };*/
-
+        handler = new Handler();
         exchanger = new SendAndLoadMessage();
 
         updateChat = () -> {
@@ -54,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
                 txt.append(m.toString()).append("\n");
             }
             tvChatBox.setText(txt.toString());
+        };
+
+        timerTick = () -> {
+            exchanger.setMessage(null);
+            new Thread(exchanger).start();
+            handler.postDelayed(timerTick, 1000);
         };
     }
 
@@ -71,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
         tvAuthor.setText(etAuthor.getText());
         tvChatBox.setMovementMethod(new ScrollingMovementMethod());
 
-        new Thread(exchanger).start();
+       // new Thread(exchanger).start();
+        handler.post(timerTick);
     }
 
     @SuppressLint("SetTextI18n")
