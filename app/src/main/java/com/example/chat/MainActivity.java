@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -27,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText etMessage;
 
     private Runnable loadMessages;
-    private Runnable showChat;
+    private Runnable updateChat;
+    private String jsonResponse;
     private String forChatBox;
 
     public MainActivity() {
@@ -48,16 +53,21 @@ public class MainActivity extends AppCompatActivity {
                 response = html.toString();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    forChatBox = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                    jsonResponse = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                 }
-                runOnUiThread(showChat);
+                ParseJson parser = new ParseJson(jsonResponse);
+                new Thread(parser).start();
             }catch (IOException ex){
                 ex.printStackTrace();
             }
         };
 
-        showChat = () -> {
-            tvChatBox.setText(forChatBox);
+        updateChat = () -> {
+            String txt = "";
+            for(Message m:messages){
+                txt+=m.toString()+"\n";
+            }
+            tvChatBox.setText(txt);
         };
     }
 
@@ -95,4 +105,67 @@ public class MainActivity extends AppCompatActivity {
         tvChatBox.append(tvAuthor.getText() + " - " + message + "\n");
         etMessage.setText("");
     }
+
+    class ParseJson implements Runnable{
+
+        private JSONArray messagesArray;
+        private String src;
+
+        public ParseJson(String src) {
+            this.src = src;
+        }
+
+        public JSONArray getMessages() {
+            return messagesArray;
+        }
+
+        @Override
+        public void run() {
+            if(this.src == null){
+                return;
+            }
+            try{
+                JSONObject json = new JSONObject(this.src);
+                int status = json.getInt("status");
+                if(status!=1) {
+                    messagesArray = null;
+                    return;
+                }
+
+                this.messagesArray = json.getJSONArray("data");
+                messages.clear();
+                for(int i= 0;i<this.messagesArray.length();i++){
+                    messages.add(Message.fromJSONObject(this.messagesArray.getJSONObject(i)));
+                }
+                runOnUiThread(updateChat);
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
