@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         exchanger.setMessage(new Message(etAuthor.getText().toString(), message));
         //tvChatBox.append(tvAuthor.getText() + " - " + message + "\n");
         etMessage.setText("");
+        new Thread(exchanger).start();
     }
 
     class ParseJson implements Runnable{
