@@ -2,6 +2,7 @@ package com.example.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +46,10 @@ public class MainActivity extends AppCompatActivity {
                     html.append((char)sym);
                 }
                 response = html.toString();
-                forChatBox = response;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    forChatBox = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                }
                 runOnUiThread(showChat);
             }catch (IOException ex){
                 ex.printStackTrace();
