@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 while ((sym = http.read())!=-1){
                     html.append((char)sym);
                 }
-                response = http.toString();
+                response = html.toString();
                 forChatBox = response;
                 runOnUiThread(showChat);
             }catch (IOException ex){
