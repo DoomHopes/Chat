@@ -30,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvAuthor;
     private EditText etMessage;
 
-    private final Runnable loadMessages;
+   // private final Runnable loadMessages;
+
+    private SendAndLoadMessage exchanger;
+
     private final Runnable updateChat;
     private String jsonResponse;
     private String forChatBox;
@@ -38,29 +41,12 @@ public class MainActivity extends AppCompatActivity {
     public MainActivity() {
         super();
         messages = new ArrayList<>();
-        loadMessages = () ->{
-            //http://chat.momentfor.fun
 
-            String response = null;
+        /*loadMessages = () ->{
 
-            try{
-                InputStream http = new URL("http://chat.momentfor.fun").openStream();
-                StringBuilder html = new StringBuilder();
-                int sym;
-                while ((sym = http.read())!=-1){
-                    html.append((char)sym);
-                }
-                response = html.toString();
+        };*/
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    jsonResponse = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                }
-                ParseJson parser = new ParseJson(jsonResponse);
-                new Thread(parser).start();
-            }catch (IOException ex){
-                ex.printStackTrace();
-            }
-        };
+        exchanger = new SendAndLoadMessage();
 
         updateChat = () -> {
             StringBuilder txt = new StringBuilder();
@@ -85,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         tvAuthor.setText(etAuthor.getText());
         tvChatBox.setMovementMethod(new ScrollingMovementMethod());
 
-        new Thread(loadMessages).start();
+        new Thread(exchanger).start();
     }
 
     @SuppressLint("SetTextI18n")
@@ -146,6 +132,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    class SendAndLoadMessage implements Runnable{
+
+        private Message message;
+
+        public void setMessage(Message message) {
+            this.message = message;
+        }
+
+        @Override
+        public void run() {
+            //http://chat.momentfor.fun
+
+            String url = "http://chat.momentfor.fun";
+
+            if(this.message != null){
+                url+="?" + this.message.toGETRequest();
+            }
+
+            String response = null;
+
+            try{
+                InputStream http = new URL(url).openStream();
+                StringBuilder html = new StringBuilder();
+                int sym;
+                while ((sym = http.read())!=-1){
+                    html.append((char)sym);
+                }
+                response = html.toString();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    jsonResponse = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                }
+                ParseJson parser = new ParseJson(jsonResponse);
+                new Thread(parser).start();
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+    }
 }
 
 

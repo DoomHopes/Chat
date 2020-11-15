@@ -13,6 +13,7 @@ import java.util.SimpleTimeZone;
 public class Message {
 
     private static SimpleDateFormat sqlFormat = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
+    private static SimpleDateFormat messageFormat = new SimpleDateFormat("dd.MM hh.mm");
 
     //Model
     private String text;
@@ -58,7 +59,11 @@ public class Message {
 
     @Override
     public String toString(){
-        return this.author + " - " + this.text;
+        return this.author + " - " + this.text + " <" + messageFormat.format(this.moment) +">";
+    }
+
+    public String toGETRequest() {
+        return "author=" + this.author + "&text="+ this.text;
     }
 
     //Fabric
@@ -84,4 +89,6 @@ public class Message {
             return null;
         }
     }
+
+
 }
