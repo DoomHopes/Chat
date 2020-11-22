@@ -2,8 +2,11 @@ package com.example.chat;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer player;
 
     //Notification
-    private static String CHANNEL_ID = "channel";
+    private static final String CHANNEL_ID = "channel";
     private static final int NOTIFY_ID = 101;
 
     public MainActivity() {
@@ -68,7 +71,17 @@ public class MainActivity extends AppCompatActivity {
         timerTick = () -> {
             exchanger.setMessage(null);
             new Thread(exchanger).start();
-            handler.postDelayed(timerTick, 1000);
+            handler.postDelayed(()->
+            {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID )
+                        .setSmallIcon( android.R.drawable.sym_def_app_icon )
+                        .setContentTitle( "Communicator" )
+                        .setContentText( "Communicator message" )
+                        .setPriority( NotificationCompat.PRIORITY_DEFAULT ) ;
+                Notification notification = builder.build() ;
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from( MainActivity.this ) ;
+                notificationManager.notify( NOTIFY_ID, notification ) ;
+            }, 3000);
         };
     }
 
