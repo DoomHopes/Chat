@@ -1,12 +1,16 @@
 package com.example.chat;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,13 +24,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private final ArrayList<Message> messages;
 
-    private EditText etAuthor;
+    private String authorName = "DefaultName";
+
+    //private EditText etAuthor;
     private TextView tvChatBox;
     private TextView tvAuthor;
     private EditText etMessage;
@@ -67,19 +74,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etAuthor = findViewById(R.id.editTextAuthor);
+        //etAuthor = findViewById(R.id.editTextAuthor);
         tvChatBox = findViewById(R.id.textViewChatBox);
         tvAuthor = findViewById(R.id.textViewAuthor);
         etMessage = findViewById(R.id.editTextPersonAuthor);
 
-        tvAuthor.setText(etAuthor.getText());
+        //tvAuthor.setText(etAuthor.getText());
         tvChatBox.setMovementMethod(new ScrollingMovementMethod());
 
        // new Thread(exchanger).start();
         handler.post(timerTick);
+
     }
 
-    @SuppressLint("SetTextI18n")
+    /*@SuppressLint("SetTextI18n")
     public void onClickSetAuthor(View view) {
         CharSequence authorName = etAuthor.getText();
         if(authorName.equals("")){
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         tvAuthor.setText(authorName + ":");
-    }
+    }*/
 
     public void sendMessage(View view) {
         String message = etMessage.getText().toString();
@@ -95,10 +103,24 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Please, enter message", Toast.LENGTH_SHORT).show();
             return;
         }
-        exchanger.setMessage(new Message(etAuthor.getText().toString(), message));
+        exchanger.setMessage(new Message(authorName, message));
         //tvChatBox.append(tvAuthor.getText() + " - " + message + "\n");
         etMessage.setText("");
         new Thread(exchanger).start();
+    }
+
+    public void onClickSettings(View view) {
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivityForResult(intent,1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {return;}
+        String name = data.getStringExtra("name");
+        tvAuthor.setText(name + ":");
+        authorName=name;
     }
 
     class ParseJson implements Runnable{

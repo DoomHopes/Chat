@@ -4,4 +4,6 @@
     <string name="ok">OK</string>
     <string name="name">Name</string>
     <string name="author_default">Красавчик</string>
+    <string name="item1">Settings</string>
+    <string name="settings">Settings</string>
 </resources>

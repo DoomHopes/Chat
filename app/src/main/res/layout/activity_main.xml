@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -33,36 +33,39 @@
             android:layout_weight="1"
             android:onClick="onClickSetAuthor"
             android:text="@string/ok" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewChatBox"
-        android:layout_width="351dp"
-        android:layout_height="264dp"
-        android:background="@color/cardview_dark_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.087" />
+    </LinearLayout>-->
+
 
     <LinearLayout
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.524"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewChatBox"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.157">
 
-        <TextView
-            android:id="@+id/textViewAuthor"
+        <Button
+            android:id="@+id/button2"
             android:layout_width="match_parent"
-            android:layout_height="47dp" />
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:onClick="onClickSettings"/>
+
+        <TextView
+            android:id="@+id/textViewChatBox"
+            android:layout_width="351dp"
+            android:layout_height="264dp"
+            android:background="@color/cardview_light_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.203" />
 
         <EditText
             android:id="@+id/editTextPersonAuthor"
@@ -77,6 +80,16 @@
             android:layout_height="wrap_content"
             android:onClick="sendMessage"
             android:text="@string/ok" />
+
+        <TextView
+            android:id="@+id/textViewAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="47dp" />
+
+
+
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
