@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,12 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
     private String authorName = "DefaultName";
 
-    //private EditText etAuthor;
     private TextView tvChatBox;
     private TextView tvAuthor;
     private EditText etMessage;
-
-   // private final Runnable loadMessages;
 
     private SendAndLoadMessage exchanger;
 
@@ -46,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private Runnable timerTick;
     private Handler handler;
     private String jsonResponse;
+
+    private MediaPlayer player;
+
+    //Notification
+    private static String CHANNEL_ID = "channel";
+    private static final int NOTIFY_ID = 101;
 
     public MainActivity() {
         super();
@@ -74,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        player = MediaPlayer.create(this, R.raw.sound_1);
+
         //etAuthor = findViewById(R.id.editTextAuthor);
         tvChatBox = findViewById(R.id.textViewChatBox);
         tvAuthor = findViewById(R.id.textViewAuthor);
@@ -84,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
        // new Thread(exchanger).start();
         handler.post(timerTick);
-
     }
 
     /*@SuppressLint("SetTextI18n")
