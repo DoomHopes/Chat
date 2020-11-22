@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        player = MediaPlayer.create(this, R.raw.sound_1);
+        player = MediaPlayer.create(this, R.raw.sound_2);
 
         //etAuthor = findViewById(R.id.editTextAuthor);
         tvChatBox = findViewById(R.id.textViewChatBox);
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         //tvChatBox.append(tvAuthor.getText() + " - " + message + "\n");
         etMessage.setText("");
         new Thread(exchanger).start();
+        player.start();
     }
 
     public void onClickSettings(View view) {
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {return;}
         String name = data.getStringExtra("name");
-        tvAuthor.setText(name + ":");
+        tvAuthor.setText(name);
         authorName=name;
     }
 
